@@ -124,7 +124,7 @@ def get_details(index):
     #print("sample Json",sampleJson)
     print("question ",sampleJson['question'])
 
-    return sampleJson['question'],sampleJson['answer_choices'][0],,sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
+    return sampleJson['question'],sampleJson['answer_choices'][0],sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
 
 
 # def main_page():
