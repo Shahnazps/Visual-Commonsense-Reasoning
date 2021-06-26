@@ -262,8 +262,8 @@ def get_details(index):
 
 
 def loadImage(path,index):
-    photo = str(index) + ".jpg"
-    path = os.path.join(path,photo)
+    # photo = str(index) + ".jpg"
+    # path = os.path.join(path,photo)
     
     img = Image.open(path)
     
