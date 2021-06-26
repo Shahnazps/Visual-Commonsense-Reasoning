@@ -121,7 +121,10 @@ def get_details(index):
     sampleJson['answer_choices'] = answer_choices
     sampleJson['img_path'] = "images/vcr1images/" + sampleJson['img_fn']
     print("answers ",sampleJson['answer_choices'][0])
-    print("sample Json",sampleJson)
+    #print("sample Json",sampleJson)
+    print("question ",sampleJson['question'])
+
+    return sampleJson['question'],sampleJson['answer_choices'][0],,sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
 
 
 # def main_page():
@@ -305,5 +308,5 @@ class OutputImage(BaseModel):
     )
 
 def modelOutput(input:ImageNo)->OutputImage:
-    get_details(input.index)
-    return OutputImage(image=loadImage(imagePath,input.index),question="",answer1="",answer2="",answer3="",answer4="")
+    question,ans1,ans2,ans3,ans4 = get_details(input.index)
+    return OutputImage(image=loadImage(imagePath,input.index),question=question,answer1=ans1,answer2=ans2,answer3=ans3,answer4=ans4)
