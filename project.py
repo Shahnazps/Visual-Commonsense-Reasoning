@@ -1,21 +1,26 @@
 import io
 import os
+import json
 from pydantic import BaseModel,Field,FilePath
 from opyrator.components.types import FileContent
 from PIL import Image 
 imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
 
 #model imports
-import argparse
 import json
-import multiprocessing
 from subprocess import run
+from config import VCR_ANNOTS_DIR
+import argparse
+from dataloaders.vcr import VCR, VCRLoader
 import torch
-import numpy as np
 from allennlp.common.params import Params
 from torch.nn import DataParallel
+import multiprocessing
+from utils.pytorch_misc import time_batch, restore_best_checkpoint
 from allennlp.models import Model
+import models
 from torch.nn.modules import BatchNorm2d
+import numpy as np
 from nltk.tokenize import word_tokenize
 
 import sys
@@ -28,7 +33,7 @@ mode = "answer"
 
 split = "val"
 
-folder = '../saves/flagship_{}'.format(mode)
+folder = '../../saves/flagship_{}'.format(mode)
 
 params = Params.from_file('../../models/multiatt/default.json')
 NUM_GPUS = torch.cuda.device_count()
