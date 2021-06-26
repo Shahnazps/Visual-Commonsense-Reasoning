@@ -307,9 +307,8 @@ class OutputImage(BaseModel):
         max_length=140,
     )
 def listToString(sen):
-    str = ""
-    str.join(sen)
-    return str
+    str1 = ' '.join([str(elem) for elem in sen])
+    return str1
 def modelOutput(input:ImageNo)->OutputImage:
     question,ans1,ans2,ans3,ans4 = get_details(input.index)
     print("question : ",question)
