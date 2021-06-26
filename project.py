@@ -306,7 +306,13 @@ class OutputImage(BaseModel):
         example="The person is cooking",
         max_length=140,
     )
-
+def listToString(sen):
+    str = ""
+    str.join(sen)
+    return str
 def modelOutput(input:ImageNo)->OutputImage:
     question,ans1,ans2,ans3,ans4 = get_details(input.index)
-    return OutputImage(image=loadImage(imagePath,input.index),question=question,answer1=ans1,answer2=ans2,answer3=ans3,answer4=ans4)
+    print("question : ",question)
+    q = listToString(question)
+    print("q converted : ",q)
+    return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
