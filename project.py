@@ -4,8 +4,8 @@ import json
 from pydantic import BaseModel,Field,FilePath
 from opyrator.components.types import FileContent
 from PIL import Image 
-imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
-
+#imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
+imagePath ="/media/disk/user/shahnaz/project/r2c/opyrator/Visual-Commonsense-Reasoning/" 
 #model imports
 import json
 from subprocess import run
