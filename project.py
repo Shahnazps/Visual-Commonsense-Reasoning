@@ -121,10 +121,10 @@ def get_details(index):
     sampleJson['answer_choices'] = answer_choices
     sampleJson['img_path'] = "images/vcr1images/" + sampleJson['img_fn']
     print("answers ",sampleJson['answer_choices'][0])
-    #print("sample Json",sampleJson)
+    print("sample Json",sampleJson)
     print("question ",sampleJson['question'])
 
-    return sampleJson['question'],sampleJson['answer_choices'][0],sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
+    return sampleJson['img_path'],sampleJson['question'],sampleJson['answer_choices'][0],sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
 
 
 # def main_page():
@@ -310,8 +310,8 @@ def listToString(sen):
     str1 = ' '.join([str(elem) for elem in sen])
     return str1
 def modelOutput(input:ImageNo)->OutputImage:
-    question,ans1,ans2,ans3,ans4 = get_details(input.index)
+    imagePath1,question,ans1,ans2,ans3,ans4 = get_details(input.index)
     print("question : ",question)
     q = listToString(question)
     print("q converted : ",q)
-    return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
+    return OutputImage(image=loadImage(imagePath1,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
