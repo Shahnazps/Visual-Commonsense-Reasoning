@@ -30,7 +30,7 @@ split = "val"
 
 folder = '../saves/flagship_{}'.format(mode)
 
-params = Params.from_file('../models/multiatt/default.json')
+params = Params.from_file('../../models/multiatt/default.json')
 NUM_GPUS = torch.cuda.device_count()
 NUM_CPUS = multiprocessing.cpu_count()
 if NUM_GPUS == 0:
