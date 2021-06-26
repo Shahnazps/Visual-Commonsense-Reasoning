@@ -121,6 +121,7 @@ def get_details(index):
     sampleJson['answer_choices'] = answer_choices
     sampleJson['img_path'] = "images/vcr1images/" + sampleJson['img_fn']
     print("answers ",sampleJson['answer_choices'][0])
+    print("sample Json",sampleJson)
 
 
 # def main_page():
