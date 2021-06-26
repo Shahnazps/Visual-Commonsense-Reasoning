@@ -119,7 +119,7 @@ def get_details(index):
     #rawdata
     sampleJson['index'] = index
     sampleJson['answer_choices'] = answer_choices
-    sampleJson['img_path'] = "images/vcr1images/" + sampleJson['img_fn']
+    sampleJson['img_path'] = "../../data/vcr1images/" + sampleJson['img_fn']
     print("answers ",sampleJson['answer_choices'][0])
     print("sample Json",sampleJson)
     print("question ",sampleJson['question'])
