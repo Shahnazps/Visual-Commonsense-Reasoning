@@ -9,22 +9,21 @@ imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
 #model imports
 import json
 from subprocess import run
-from config import VCR_ANNOTS_DIR
-import argparse
+
+import sys
+sys.path.insert(0, "/media/disk/user/shahnaz/project/r2c")
+#import argparse
 from dataloaders.vcr import VCR, VCRLoader
 import torch
 from allennlp.common.params import Params
 from torch.nn import DataParallel
 import multiprocessing
-from utils.pytorch_misc import time_batch, restore_best_checkpoint
 from allennlp.models import Model
 import models
 from torch.nn.modules import BatchNorm2d
 import numpy as np
 from nltk.tokenize import word_tokenize
-
-import sys
-sys.path.insert(0, "/media/disk/user/shahnaz/project/r2c")
+from config import VCR_ANNOTS_DIR
 from dataloaders.vcr import VCR,VCRLoader
 from utils.pytorch_misc import time_batch, restore_best_checkpoint
 from config import VCR_ANNOTS_DIR
