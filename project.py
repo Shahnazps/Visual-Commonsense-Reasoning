@@ -99,7 +99,8 @@ def eval(dataset, model, index, num):
     val_labels = np.concatenate(val_labels, 0)
     val_probs = np.concatenate(val_probs, 0)
     acc = float(np.mean(val_labels == val_probs.argmax(1)))
-    return {"label": val_labels, "pred": val_probs.argmax(1), "acc": acc}
+    #return {"label": val_labels, "pred": val_probs.argmax(1), "acc": acc}
+    return val_labels,val_probs,acc
     # print("val_labels: {} and val_probs: {}".format(val_labels, val_probs.argmax(1)))
     # print("Final val accuracy is {:.3f}".format(acc))
     # np.save(os.path.join(folder, f'valpreds_custom.npy'), val_probs)
@@ -284,6 +285,7 @@ def loadImage(path,index):
 #     #image:FileContent = Field(...,mime_type="image/png")
 #     index:int
 class ImageNo(BaseModel):
+    index = modelIndex
     question: str = Field(
         ...,
         description="Choices for the above question",
@@ -318,7 +320,9 @@ class ImageNo(BaseModel):
     userChoice: int
 class OutputImage(BaseModel):
     image:FileContent = Field(...,mime_type="image/png")
-    answer: int
+    label: str
+    prob:str
+    acc:str
 
 
 
@@ -358,4 +362,5 @@ def modelOutput(input:ImageNo)->OutputImage:
     # q = listToString(question)
     # print("q converted : ",q)
     #return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
-    return OutputImage(image=loadImage(imagePath1,modelIndex),answer = input.userChoice)
+    label,prob,acc = eval(dataset,model,modelIndex,0)
+    return OutputImage(image=loadImage(imagePath1,modelIndex),label=label,prob=prob,acc=acc)
