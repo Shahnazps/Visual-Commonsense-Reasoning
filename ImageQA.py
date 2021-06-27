@@ -321,4 +321,4 @@ def modelOutput(input: ImageNo) -> OutputImage:
     print("question : ",question)
     q = listToString(question)
     print("q converted : ",q)
-    return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
+    return OutputImage(image=loadImage(imagePath1,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
