@@ -123,9 +123,10 @@ def get_details(index):
     sampleJson['index'] = index
     sampleJson['answer_choices'] = answer_choices
     sampleJson['img_path'] = "../../data/vcr1images/" + sampleJson['img_fn']
-    print("answers ",sampleJson['answer_choices'][0])
-    print("sample Json",sampleJson)
-    print("question ",sampleJson['question'])
+    #print("answers ",sampleJson['answer_choices'][0])
+    #print("sample Json",sampleJson)
+    #print("question ",sampleJson['question'])
+    print("Image Path ",sampleJson['img_path'])
 
     return sampleJson['img_path'],sampleJson['question'],sampleJson['answer_choices'][0],sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
 
@@ -323,9 +324,7 @@ class ImageNo(BaseModel):
 
 class OutputImage(BaseModel):
     image:FileContent = Field(...,mime_type="image/png")
-    answer: str = Field(
-        ...
-    )
+    answer: int
 
 
 
