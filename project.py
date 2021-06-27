@@ -315,13 +315,7 @@ class ImageNo(BaseModel):
         max_length=140,
     )
 
-    userChoice: str = Field(
-        ...,
-        description="Choices for the above question",
-        example="Enter your choice",
-        max_length=140,
-    )
-
+    userChoice: int
 class OutputImage(BaseModel):
     image:FileContent = Field(...,mime_type="image/png")
     answer: int
