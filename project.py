@@ -363,4 +363,4 @@ def modelOutput(input:ImageNo)->OutputImage:
     # print("q converted : ",q)
     #return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
     label,prob,acc = eval(dataset,model,modelIndex,0)
-    return OutputImage(image=loadImage(imagePath1,modelIndex),label=label,prob=prob,acc=acc)
+    return OutputImage(image=loadImage(imagePath1,modelIndex),label=str(label),prob=str(prob),acc=str(acc))
