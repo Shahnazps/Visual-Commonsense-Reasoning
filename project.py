@@ -27,6 +27,7 @@ from config import VCR_ANNOTS_DIR
 from dataloaders.vcr import VCR,VCRLoader
 from utils.pytorch_misc import time_batch, restore_best_checkpoint
 from config import VCR_ANNOTS_DIR
+import random
 
 mode = "answer"
 
@@ -67,6 +68,8 @@ for submodule in model.detector.backbone.modules():
 model = DataParallel(model).cuda() if NUM_GPUS > 1 else model.cuda()
 restore_best_checkpoint(model, folder)
 
+modelIndex = random.randint(1,100)
+print("Model index ",modelIndex)
 
 def eval(dataset, model, index, num):
     dataset_loader = VCRLoader.from_dataset(dataset, **loader_params)
@@ -126,6 +129,11 @@ def get_details(index):
 
     return sampleJson['img_path'],sampleJson['question'],sampleJson['answer_choices'][0],sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
 
+def listToString(sen):
+    str1 = ' '.join([str(elem) for elem in sen])
+    return str1
+
+imagePath1,question,ans1,ans2,ans3,ans4 = get_details(modelIndex)
 
 # def main_page():
 #     split = "val"
@@ -271,47 +279,90 @@ def loadImage(path,index):
     img.save(img_byte,format="PNG")
     return img_byte.getvalue()
 
+# class ImageNo(BaseModel):
+#     #image:FileContent = Field(...,mime_type="image/png")
+#     index:int
 class ImageNo(BaseModel):
-    #image:FileContent = Field(...,mime_type="image/png")
-    index:int
-
-
-
-class OutputImage(BaseModel):
-    image:FileContent = Field(...,mime_type="image/png")
-    question:str = Field(
-            ...
-            )
+    question: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=listToString(question),
+        max_length=140,
+    )
     answer1: str = Field(
         ...,
         description="Choices for the above question",
-        example="He is eating",
+        example=listToString(ans1),
         max_length=140,
     )
     answer2: str = Field(
         ...,
         description="Choices for the above question",
-        example="He is dancing",
+        example=listToString(ans2),
         max_length=140,
     )
     answer3: str = Field(
         ...,
         description="Choices for the above question",
-        example="She is sleeping",
+        example=listToString(ans3),
         max_length=140,
     )
     answer4: str = Field(
         ...,
         description="Choices for the above question",
-        example="The person is cooking",
+        example=listToString(ans4),
         max_length=140,
     )
-def listToString(sen):
-    str1 = ' '.join([str(elem) for elem in sen])
-    return str1
+
+    userChoice: str = Field(
+        ...,
+        description="Choices for the above question",
+        example="Enter your choice",
+        max_length=140,
+    )
+
+class OutputImage(BaseModel):
+    image:FileContent = Field(...,mime_type="image/png")
+    answer: str = Field(
+        ...
+    )
+
+
+
+# class OutputImage(BaseModel):
+#     image:FileContent = Field(...,mime_type="image/png")
+#     question:str = Field(
+#             ...
+#             )
+#     answer1: str = Field(
+#         ...,
+#         description="Choices for the above question",
+#         example="He is eating",
+#         max_length=140,
+#     )
+#     answer2: str = Field(
+#         ...,
+#         description="Choices for the above question",
+#         example="He is dancing",
+#         max_length=140,
+#     )
+#     answer3: str = Field(
+#         ...,
+#         description="Choices for the above question",
+#         example="She is sleeping",
+#         max_length=140,
+#     )
+#     answer4: str = Field(
+#         ...,
+#         description="Choices for the above question",
+#         example="The person is cooking",
+#         max_length=140,
+#     )
+
 def modelOutput(input:ImageNo)->OutputImage:
-    imagePath1,question,ans1,ans2,ans3,ans4 = get_details(input.index)
-    print("question : ",question)
-    q = listToString(question)
-    print("q converted : ",q)
-    return OutputImage(image=loadImage(imagePath1,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
+    # imagePath1,question,ans1,ans2,ans3,ans4 = get_details(input.index)
+    # print("question : ",question)
+    # q = listToString(question)
+    # print("q converted : ",q)
+    #return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
+    return OutputImage(image=loadImage(imagePath,modelIndex),answer = input.userChoice)
