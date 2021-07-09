@@ -20,7 +20,7 @@ answers: List[str] = [f"This is answer {x}" for x in range(1, 5)]
 
 class ImageNo(BaseModel):
     index: int = 0
-    image: FileContent = Field(..., mime_type="image/png")
+    # image: FileContent = Field(..., mime_type="image/png")
     question: str = Field(
         ...,
         description="Choices for the above question",
@@ -78,6 +78,6 @@ def modelOutput(input: ImageNo) -> OutputImage:
     label = "some_label"
     prob = 0.1
     acc = 0.2
-    img = Image.open(image_path)
-    st.image(np.array(img))
+    # img = Image.open(image_path)
+    # st.image(np.array(img))
     return OutputImage(image=load_image(image_path), label=str(label), prob=str(prob), acc=str(acc))
