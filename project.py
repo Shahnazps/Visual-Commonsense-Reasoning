@@ -1,33 +1,32 @@
+import random
+from utils.pytorch_misc import time_batch, restore_best_checkpoint
+from config import VCR_ANNOTS_DIR
+from nltk.tokenize import word_tokenize
+import numpy as np
+from torch.nn.modules import BatchNorm2d
+import models
+from allennlp.models import Model
+import multiprocessing
+from torch.nn import DataParallel
+from allennlp.common.params import Params
+import torch
+from dataloaders.vcr import VCR, VCRLoader
+import sys
+from subprocess import run
 import io
 import os
 import json
-from pydantic import BaseModel,Field,FilePath
+from pydantic import BaseModel, Field, FilePath
 from opyrator.components.types import FileContent
-from PIL import Image 
-#imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
-imagePath ="/media/disk/user/shahnaz/project/r2c/opyrator/Visual-Commonsense-Reasoning/" 
-#model imports
-import json
-from subprocess import run
+from PIL import Image
+import streamlit as st
 
-import sys
+#imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
+imagePath = "/media/disk/user/shahnaz/project/r2c/opyrator/Visual-Commonsense-Reasoning/"
+# model imports
+
 sys.path.insert(0, "/media/disk/user/shahnaz/project/r2c")
 #import argparse
-from dataloaders.vcr import VCR, VCRLoader
-import torch
-from allennlp.common.params import Params
-from torch.nn import DataParallel
-import multiprocessing
-from allennlp.models import Model
-import models
-from torch.nn.modules import BatchNorm2d
-import numpy as np
-from nltk.tokenize import word_tokenize
-from config import VCR_ANNOTS_DIR
-from dataloaders.vcr import VCR,VCRLoader
-from utils.pytorch_misc import time_batch, restore_best_checkpoint
-from config import VCR_ANNOTS_DIR
-import random
 
 mode = "answer"
 
@@ -48,7 +47,8 @@ def _to_gpu(td):
     for k in td:
         if k != 'metadata':
             if isinstance(td[k], dict):
-                td[k] = {k2: v.cuda(non_blocking=True) for k2, v in td[k].items()}
+                td[k] = {k2: v.cuda(non_blocking=True)
+                         for k2, v in td[k].items()}
             else:
                 td[k].cuda(non_blocking=True)
     return td
@@ -68,8 +68,9 @@ for submodule in model.detector.backbone.modules():
 model = DataParallel(model).cuda() if NUM_GPUS > 1 else model.cuda()
 restore_best_checkpoint(model, folder)
 
-modelIndex = random.randint(1,100)
-print("Model index ",modelIndex)
+modelIndex = random.randint(1, 100)
+print("Model index ", modelIndex)
+
 
 def eval(dataset, model, index, num):
     dataset_loader = VCRLoader.from_dataset(dataset, **loader_params)
@@ -87,23 +88,26 @@ def eval(dataset, model, index, num):
                 if b == index:
                     batch = _to_gpu(batch)
                     output_dict = model(**batch)
-                    val_probs.append(output_dict['label_probs'].detach().cpu().numpy())
+                    val_probs.append(
+                        output_dict['label_probs'].detach().cpu().numpy())
                     val_labels.append(batch['label'].detach().cpu().numpy())
                     break
             else:
                 batch = _to_gpu(batch)
                 output_dict = model(**batch)
-                val_probs.append(output_dict['label_probs'].detach().cpu().numpy())
+                val_probs.append(
+                    output_dict['label_probs'].detach().cpu().numpy())
                 val_labels.append(batch['label'].detach().cpu().numpy())
     print("Val Labels : ", val_labels)
     val_labels = np.concatenate(val_labels, 0)
     val_probs = np.concatenate(val_probs, 0)
     acc = float(np.mean(val_labels == val_probs.argmax(1)))
-    #return {"label": val_labels, "pred": val_probs.argmax(1), "acc": acc}
-    return val_labels,val_probs,acc
+    # return {"label": val_labels, "pred": val_probs.argmax(1), "acc": acc}
+    return val_labels, val_probs, acc
     # print("val_labels: {} and val_probs: {}".format(val_labels, val_probs.argmax(1)))
     # print("Final val accuracy is {:.3f}".format(acc))
     # np.save(os.path.join(folder, f'valpreds_custom.npy'), val_probs)
+
 
 def get_details(index):
     split = "val"
@@ -111,8 +115,8 @@ def get_details(index):
     sampleJson = {}
     pred_dict = {}
     num = 0
-    with open(os.path.join(VCR_ANNOTS_DIR,'{}.jsonl'.format(split)),'r') as f:
-        for i,s in enumerate(f):
+    with open(os.path.join(VCR_ANNOTS_DIR, '{}.jsonl'.format(split)), 'r') as f:
+        for i, s in enumerate(f):
             if index == i:
                 sampleJson = json.loads(s)
                 break
@@ -120,22 +124,25 @@ def get_details(index):
         conditioned_label = sampleJson["answer_label"]
         sampleJson['question'] += sampleJson['answer_choices'][conditioned_label]
     answer_choices = sampleJson['{}_choices'.format(mode)]
-    #rawdata
+    # rawdata
     sampleJson['index'] = index
     sampleJson['answer_choices'] = answer_choices
     sampleJson['img_path'] = "../../data/vcr1images/" + sampleJson['img_fn']
     #print("answers ",sampleJson['answer_choices'][0])
     #print("sample Json",sampleJson)
     #print("question ",sampleJson['question'])
-    print("Image Path ",sampleJson['img_path'])
+    print("Image Path ", sampleJson['img_path'])
 
-    return sampleJson['img_path'],sampleJson['question'],sampleJson['answer_choices'][0],sampleJson['answer_choices'][1],sampleJson['answer_choices'][2],sampleJson['answer_choices'][3]
+    return (sampleJson['img_path'], sampleJson['question'], sampleJson['answer_choices'][0],
+            sampleJson['answer_choices'][1], sampleJson['answer_choices'][2], sampleJson['answer_choices'][3])
+
 
 def listToString(sen):
     str1 = ' '.join([str(elem) for elem in sen])
     return str1
 
-imagePath1,question,ans1,ans2,ans3,ans4 = get_details(modelIndex)
+
+imagePath1, question, ans1, ans2, ans3, ans4 = get_details(modelIndex)
 
 # def main_page():
 #     split = "val"
@@ -266,24 +273,32 @@ imagePath1,question,ans1,ans2,ans3,ans4 = get_details(modelIndex)
 #     main()
 
 
-
-
-
-
-
-def loadImage(path,index):
+def loadImage(path, index):
     # photo = str(index) + ".jpg"
     # path = os.path.join(path,photo)
-    
+
     img = Image.open(path)
-    
+
     img_byte = io.BytesIO()
-    img.save(img_byte,format="PNG")
+    img.save(img_byte, format="PNG")
     return img_byte.getvalue()
 
 # class ImageNo(BaseModel):
 #     #image:FileContent = Field(...,mime_type="image/png")
 #     index:int
+
+def pre_commands():
+    image_path = imagePath1
+    img = Image.open(image_path)
+    st.image(np.array(img))
+
+
+def post_commands():
+    image_path = imagePath1
+    img = Image.open(image_path)
+    st.image(np.array(img))
+
+
 class ImageNo(BaseModel):
     index = modelIndex
     question: str = Field(
@@ -318,12 +333,13 @@ class ImageNo(BaseModel):
     )
 
     userChoice: int
-class OutputImage(BaseModel):
-    image:FileContent = Field(...,mime_type="image/png")
-    label: str
-    prob:str
-    acc:str
 
+
+class OutputImage(BaseModel):
+    image: FileContent = Field(..., mime_type="image/png")
+    label: str
+    prob: str
+    acc: str
 
 
 # class OutputImage(BaseModel):
@@ -356,11 +372,11 @@ class OutputImage(BaseModel):
 #         max_length=140,
 #     )
 
-def modelOutput(input:ImageNo)->OutputImage:
+def modelOutput(input: ImageNo) -> OutputImage:
     # imagePath1,question,ans1,ans2,ans3,ans4 = get_details(input.index)
     # print("question : ",question)
     # q = listToString(question)
     # print("q converted : ",q)
-    #return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
-    label,prob,acc = eval(dataset,model,modelIndex,0)
-    return OutputImage(image=loadImage(imagePath1,modelIndex),label=str(label),prob=str(prob),acc=str(acc))
+    # return OutputImage(image=loadImage(imagePath,input.index),question=q,answer1=listToString(ans1),answer2=listToString(ans2),answer3=listToString(ans3),answer4=listToString(ans4))
+    label, prob, acc = eval(dataset, model, modelIndex, 0)
+    return OutputImage(image=loadImage(imagePath1, modelIndex), label=str(label), prob=str(prob), acc=str(acc))
