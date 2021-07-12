@@ -6,13 +6,17 @@ from opyrator.components.types import FileContent
 from PIL import Image
 import streamlit as st
 
+# imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
+imagePath = "/media/disk/user/shahnaz/project/r2c/opyrator/Visual-Commonsense-Reasoning/"
+# model imports
 import json
 from subprocess import run
 
 import sys
 
+sys.path.insert(0, "/media/disk/user/shahnaz/project/r2c")
 # import argparse
-#from dataloaders.vcr import VCR, VCRLoader
+from dataloaders.vcr import VCR, VCRLoader
 import torch
 from allennlp.common.params import Params
 from torch.nn import DataParallel
@@ -30,11 +34,9 @@ import random
 
 
 
-#imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
-imagePath = "/media/disk/user/shahnaz/project/r2c/opyrator/Visual-Commonsense-Reasoning/"
 # model imports
 
-sys.path.insert(0, "/media/disk/user/shahnaz/project/r2c")
+
 #import argparse
 
 mode = "answer"
