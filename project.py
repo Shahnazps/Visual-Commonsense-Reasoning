@@ -287,16 +287,7 @@ def loadImage(path, index):
 #     #image:FileContent = Field(...,mime_type="image/png")
 #     index:int
 
-def pre_commands():
-    image_path = imagePath1
-    img = Image.open(image_path)
-    st.image(np.array(img))
 
-
-def post_commands():
-    image_path = imagePath1
-    img = Image.open(image_path)
-    st.image(np.array(img))
 
 
 class ImageNo(BaseModel):
@@ -371,6 +362,17 @@ class OutputImage(BaseModel):
 #         example="The person is cooking",
 #         max_length=140,
 #     )
+
+# def pre_commands():
+#     image_path = imagePath1
+#     img = Image.open(image_path)
+#     st.image(np.array(img))
+#
+#
+# def post_commands():
+#     image_path = imagePath1
+#     img = Image.open(image_path)
+#     st.image(np.array(img))
 
 def modelOutput(input: ImageNo) -> OutputImage:
     # imagePath1,question,ans1,ans2,ans3,ans4 = get_details(input.index)
