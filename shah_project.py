@@ -51,11 +51,35 @@ class ImageNo(BaseModel):
         example=answers[3],
         max_length=140,
     )
+    rationale1: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=answers[0],
+        max_length=140,
+    )
+    rationale2: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=answers[1],
+        max_length=140,
+    )
+    rationale3: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=answers[2],
+        max_length=140,
+    )
+    rationale4: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=answers[3],
+        max_length=140,
+    )
     userChoice: int
 
 
 class OutputImage(BaseModel):
-    image: FileContent = Field(..., mime_type="image/png")
+    #image: FileContent = Field(..., mime_type="image/png")
     label: str
     prob: str
     acc: str
@@ -80,4 +104,5 @@ def modelOutput(input: ImageNo) -> OutputImage:
     acc = 0.2
     # img = Image.open(image_path)
     # st.image(np.array(img))
-    return OutputImage(image=load_image(image_path), label=str(label), prob=str(prob), acc=str(acc))
+    return OutputImage(label=str(label), prob=str(prob), acc=str(acc))
+    #return OutputImage(image=load_image(image_path), label=str(label), prob=str(prob), acc=str(acc))
