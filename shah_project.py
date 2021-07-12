@@ -51,6 +51,7 @@ class ImageNo(BaseModel):
         example=answers[3],
         max_length=140,
     )
+    userAnswerChoice: int
     rationale1: str = Field(
         ...,
         description="Choices for the above question",
@@ -75,7 +76,7 @@ class ImageNo(BaseModel):
         example=answers[3],
         max_length=140,
     )
-    userChoice: int
+    userRationaleChoice: int
 
 
 class OutputImage(BaseModel):
