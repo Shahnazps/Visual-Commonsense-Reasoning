@@ -1,18 +1,3 @@
-import random
-from utils.pytorch_misc import time_batch, restore_best_checkpoint
-from config import VCR_ANNOTS_DIR
-from nltk.tokenize import word_tokenize
-import numpy as np
-from torch.nn.modules import BatchNorm2d
-import models
-from allennlp.models import Model
-import multiprocessing
-from torch.nn import DataParallel
-from allennlp.common.params import Params
-import torch
-from dataloaders.vcr import VCR, VCRLoader
-import sys
-from subprocess import run
 import io
 import os
 import json
@@ -20,6 +5,30 @@ from pydantic import BaseModel, Field, FilePath
 from opyrator.components.types import FileContent
 from PIL import Image
 import streamlit as st
+
+import json
+from subprocess import run
+
+import sys
+
+# import argparse
+from dataloaders.vcr import VCR, VCRLoader
+import torch
+from allennlp.common.params import Params
+from torch.nn import DataParallel
+import multiprocessing
+from allennlp.models import Model
+import models
+from torch.nn.modules import BatchNorm2d
+import numpy as np
+from nltk.tokenize import word_tokenize
+from config import VCR_ANNOTS_DIR
+from dataloaders.vcr import VCR, VCRLoader
+from utils.pytorch_misc import time_batch, restore_best_checkpoint
+from config import VCR_ANNOTS_DIR
+import random
+
+
 
 #imagePath = "/home/shahnaz/Documents/academics/main_project/opyrator/opyrator/"
 imagePath = "/media/disk/user/shahnaz/project/r2c/opyrator/Visual-Commonsense-Reasoning/"
