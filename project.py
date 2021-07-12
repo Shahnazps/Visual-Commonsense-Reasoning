@@ -12,7 +12,7 @@ from subprocess import run
 import sys
 
 # import argparse
-from dataloaders.vcr import VCR, VCRLoader
+#from dataloaders.vcr import VCR, VCRLoader
 import torch
 from allennlp.common.params import Params
 from torch.nn import DataParallel
