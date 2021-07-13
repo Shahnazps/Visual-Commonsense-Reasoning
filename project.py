@@ -121,6 +121,7 @@ def eval(dataset, model, index, num):
 
 
 def get_details(index):
+    mode = 'answer'
     split = "val"
     # dataset = VCR.custom_spluts(split,0)
     sampleJson = {}
@@ -131,21 +132,25 @@ def get_details(index):
             if index == i:
                 sampleJson = json.loads(s)
                 break
+
+    answer_choices = sampleJson['{}_choices'.format(mode)]
+    mode = 'rationale'
     if mode == "rationale":
         conditioned_label = sampleJson["answer_label"]
         sampleJson['question'] += sampleJson['answer_choices'][conditioned_label]
-    answer_choices = sampleJson['{}_choices'.format(mode)]
+    rationale_choices = sampleJson['{}_choices'.format(mode)]
     # rawdata
     sampleJson['index'] = index
     sampleJson['answer_choices'] = answer_choices
     sampleJson['img_path'] = "../../data/vcr1images/" + sampleJson['img_fn']
+    sampleJson['ratioanle_choices'] = rationale_choices
     #print("answers ",sampleJson['answer_choices'][0])
     #print("sample Json",sampleJson)
     #print("question ",sampleJson['question'])
     print("Image Path ", sampleJson['img_path'])
 
     return (sampleJson['img_path'], sampleJson['question'], sampleJson['answer_choices'][0],
-            sampleJson['answer_choices'][1], sampleJson['answer_choices'][2], sampleJson['answer_choices'][3])
+            sampleJson['answer_choices'][1], sampleJson['answer_choices'][2], sampleJson['answer_choices'][3],sampleJson['ratioanle_choices'][0],sampleJson['ratioanle_choices'][1],sampleJson['ratioanle_choices'][2],sampleJson['ratioanle_choices'][3])
 
 
 def listToString(sen):
@@ -153,7 +158,7 @@ def listToString(sen):
     return str1
 
 
-imagePath1, question, ans1, ans2, ans3, ans4 = get_details(modelIndex)
+imagePath1, question, ans1, ans2, ans3, ans4,rat1,rat2,rat3,rat4 = get_details(modelIndex)
 
 # def main_page():
 #     split = "val"
@@ -334,7 +339,32 @@ class ImageNo(BaseModel):
         max_length=140,
     )
 
-    userChoice: int
+    user_Answer_Choice: int
+    rationale1: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=listToString(rat1),
+        max_length=140,
+    )
+    rationale2: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=listToString(rat2),
+        max_length=140,
+    )
+    rationale3: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=listToString(rat3),
+        max_length=140,
+    )
+    rationale4: str = Field(
+        ...,
+        description="Choices for the above question",
+        example=listToString(rat4),
+        max_length=140,
+    )
+    user_Rationale_Choice: int
 
 
 class OutputImage(BaseModel):
