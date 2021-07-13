@@ -374,16 +374,16 @@ class OutputImage(BaseModel):
 #         max_length=140,
 #     )
 
-# def pre_commands():
-#     image_path = imagePath1
-#     img = Image.open(image_path)
-#     st.image(np.array(img))
-#
-#
-# def post_commands():
-#     image_path = imagePath1
-#     img = Image.open(image_path)
-#     st.image(np.array(img))
+def pre_commands():
+    image_path = imagePath1
+    img = Image.open(image_path)
+    st.image(np.array(img))
+
+
+def post_commands():
+    image_path = imagePath1
+    img = Image.open(image_path)
+    st.image(np.array(img))
 
 def modelOutput(input: ImageNo) -> OutputImage:
     # imagePath1,question,ans1,ans2,ans3,ans4 = get_details(input.index)
